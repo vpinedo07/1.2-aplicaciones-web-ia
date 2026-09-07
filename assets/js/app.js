@@ -1,4 +1,4 @@
-const API_URL = "https://TU-PROYECTO.vercel.app/api/chat";
+const API_URL = "https://1-2-aplicaciones-web-hesoulkim-vpinedo-s-projects.vercel.app/api/chat";
 
 const form = document.getElementById("chatForm");
 const input = document.getElementById("messageInput");
