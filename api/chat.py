@@ -183,4 +183,5 @@ class handler(BaseHTTPRequestHandler):
                     "error":
                         "No fue posible consultar el modelo de IA."
                 }
+            )
   
