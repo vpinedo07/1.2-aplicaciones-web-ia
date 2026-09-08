@@ -5,25 +5,97 @@ const input = document.getElementById("messageInput");
 const messages = document.getElementById("messages");
 const sendButton = document.getElementById("sendButton");
 
+/**
+ * Lleva el scroll al mensaje más reciente sin desplazar la página completa.
+ */
+function scrollConversationToBottom() {
+  messages.scrollTo({
+    top: messages.scrollHeight,
+    behavior: "smooth",
+  });
+}
+
+/**
+ * Agrega un mensaje a la conversación.
+ */
 function addMessage(text, type) {
   const container = document.createElement("div");
   container.classList.add("message", type);
 
+  const avatar = document.createElement("div");
+  avatar.classList.add("message-avatar");
+  avatar.setAttribute("aria-hidden", "true");
+  avatar.textContent = type === "user" ? "Tú" : "IA";
+
+  const body = document.createElement("div");
+  body.classList.add("message-body");
+
   const label = document.createElement("div");
   label.classList.add("message-label");
-  label.textContent = type === "user" ? "Tú" : "IA";
+  label.textContent = type === "user" ? "Tú" : "Asistente IA";
 
   const content = document.createElement("div");
   content.classList.add("message-content");
   content.textContent = text;
 
-  container.appendChild(label);
-  container.appendChild(content);
+  body.appendChild(label);
+  body.appendChild(content);
+
+  container.appendChild(avatar);
+  container.appendChild(body);
   messages.appendChild(container);
 
-  messages.scrollTop = messages.scrollHeight;
+  requestAnimationFrame(scrollConversationToBottom);
 
   return container;
+}
+
+/**
+ * Muestra un indicador visual mientras llega la respuesta.
+ */
+function addLoadingMessage() {
+  const container = document.createElement("div");
+  container.classList.add("message", "assistant", "loading");
+
+  const avatar = document.createElement("div");
+  avatar.classList.add("message-avatar");
+  avatar.setAttribute("aria-hidden", "true");
+  avatar.textContent = "IA";
+
+  const body = document.createElement("div");
+  body.classList.add("message-body");
+
+  const label = document.createElement("div");
+  label.classList.add("message-label");
+  label.textContent = "Asistente IA";
+
+  const content = document.createElement("div");
+  content.classList.add("message-content");
+  content.setAttribute("aria-label", "La IA está pensando");
+
+  const dots = document.createElement("span");
+  dots.classList.add("typing-dots");
+  dots.innerHTML = "<span></span><span></span><span></span>";
+
+  content.appendChild(dots);
+  body.appendChild(label);
+  body.appendChild(content);
+  container.appendChild(avatar);
+  container.appendChild(body);
+  messages.appendChild(container);
+
+  requestAnimationFrame(scrollConversationToBottom);
+
+  return container;
+}
+
+/**
+ * Activa o desactiva los controles durante la petición.
+ */
+function setSendingState(isSending) {
+  input.disabled = isSending;
+  sendButton.disabled = isSending;
+  sendButton.setAttribute("aria-busy", String(isSending));
 }
 
 form.addEventListener("submit", async (event) => {
@@ -32,16 +104,16 @@ form.addEventListener("submit", async (event) => {
   const message = input.value.trim();
 
   if (!message) {
+    input.focus();
     return;
   }
 
   addMessage(message, "user");
 
   input.value = "";
-  input.disabled = true;
-  sendButton.disabled = true;
+  setSendingState(true);
 
-  const loading = addMessage("Pensando...", "loading");
+  const loading = addLoadingMessage();
 
   try {
     const response = await fetch(API_URL, {
@@ -54,7 +126,13 @@ form.addEventListener("submit", async (event) => {
       }),
     });
 
-    const data = await response.json();
+    let data;
+
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("El servidor devolvió una respuesta no válida.");
+    }
 
     loading.remove();
 
@@ -62,14 +140,16 @@ form.addEventListener("submit", async (event) => {
       throw new Error(data.error || "Error del servidor");
     }
 
-    addMessage(data.reply, "assistant");
+    addMessage(data.reply || "La IA no devolvió contenido.", "assistant");
   } catch (error) {
     loading.remove();
-
-    addMessage("Error: " + error.message, "assistant");
+    addMessage(`Error: ${error.message}`, "assistant");
   } finally {
-    input.disabled = false;
-    sendButton.disabled = false;
+    setSendingState(false);
     input.focus();
+    scrollConversationToBottom();
   }
 });
+
+// Asegura que la conversación quede visible al cambiar el tamaño de pantalla.
+window.addEventListener("resize", scrollConversationToBottom);

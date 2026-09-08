@@ -3,38 +3,99 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat IA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0d6efd">
+    <meta name="description" content="Chat educativo de Inteligencia Artificial aplicada a las TIC">
+
+    <title>Chat IA | Inteligencia Artificial aplicada a las TIC</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Estilos propios -->
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
+    <div class="page-shell">
+        <main class="chat-app" aria-label="Aplicación de chat con Inteligencia Artificial">
 
-    <main class="app">
-        <header class="header">
-            <div>
-                <h1>Chat IA</h1>
-                <p>Inteligencia Artificial aplicada a las TIC</p>
-            </div>
-            <span class="status">● IA disponible</span>
-        </header>
+            <!-- Encabezado -->
+            <header class="chat-header">
+                <div class="d-flex align-items-center gap-3 min-width-0">
+                    <div class="ai-logo" aria-hidden="true">IA</div>
 
-        <section id="messages" class="messages" aria-live="polite">
-            <div class="message assistant">
-                <div class="message-label">IA</div>
-                <div class="message-content">
-                    Hola. Soy tu asistente de Inteligencia Artificial.
-                    ¿En qué puedo ayudarte?
+                    <div class="min-width-0">
+                        <h1 class="chat-title mb-0">Chat IA</h1>
+                        <p class="chat-subtitle mb-0 text-truncate">
+                            Inteligencia Artificial aplicada a las TIC
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <form id="chatForm" class="chat-form">
-            <input id="messageInput" type="text" maxlength="1000" placeholder="Escribe una pregunta..."
-                autocomplete="off" required>
-            <button id="sendButton" type="submit">Enviar</button>
-        </form>
-    </main>
+                <div class="status-badge" aria-label="Estado: IA disponible">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span class="d-none d-sm-inline">IA disponible</span>
+                    <span class="d-sm-none">Disponible</span>
+                </div>
+            </header>
+
+            <!-- Conversación: esta es la única zona con scroll vertical -->
+            <section id="messages" class="messages" aria-live="polite" aria-relevant="additions">
+                <div class="message assistant">
+                    <div class="message-avatar" aria-hidden="true">IA</div>
+
+                    <div class="message-body">
+                        <div class="message-label">Asistente IA</div>
+                        <div class="message-content">
+                            Hola. Soy tu asistente de Inteligencia Artificial. ¿En qué puedo ayudarte?
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Área de escritura -->
+            <form id="chatForm" class="chat-form" autocomplete="off">
+                <div class="input-group input-group-lg composer">
+                    <input
+                        id="messageInput"
+                        type="text"
+                        class="form-control"
+                        maxlength="1000"
+                        placeholder="Escribe una pregunta..."
+                        aria-label="Escribe tu mensaje"
+                        autocomplete="off"
+                        required
+                    >
+
+                    <button id="sendButton" class="btn btn-primary send-button" type="submit">
+                        <span class="send-text">Enviar</span>
+                        <svg class="send-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3.4 20.4 21 12 3.4 3.6 3 10l12 2-12 2 .4 6.4Z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="composer-help">
+                    La IA puede cometer errores. Verifica la información importante.
+                </div>
+            </form>
+
+            <!-- Footer -->
+            <footer class="app-footer">
+                <span>
+                    Desarrollado por <strong>M.C. Víctor Manuel Pinedo Fernández</strong>
+                </span>
+                <span class="footer-separator" aria-hidden="true">•</span>
+                <a href="https://github.com/vpinedo07" target="_blank" rel="noopener noreferrer">
+                    GitHub @vpinedo07
+                </a>
+                <span class="footer-separator d-none d-md-inline" aria-hidden="true">•</span>
+                <span class="d-none d-md-inline">2026</span>
+            </footer>
+
+        </main>
+    </div>
 
     <script src="assets/js/app.js"></script>
 </body>
