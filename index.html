@@ -57,16 +57,9 @@
             <!-- Área de escritura -->
             <form id="chatForm" class="chat-form" autocomplete="off">
                 <div class="input-group input-group-lg composer">
-                    <input
-                        id="messageInput"
-                        type="text"
-                        class="form-control"
-                        maxlength="1000"
-                        placeholder="Escribe una pregunta..."
-                        aria-label="Escribe tu mensaje"
-                        autocomplete="off"
-                        required
-                    >
+                    <input id="messageInput" type="text" class="form-control" maxlength="1000"
+                        placeholder="Escribe una pregunta..." aria-label="Escribe tu mensaje" autocomplete="off"
+                        required>
 
                     <button id="sendButton" class="btn btn-primary send-button" type="submit">
                         <span class="send-text">Enviar</span>
@@ -96,6 +89,11 @@
 
         </main>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+
+    <script src="assets/js/app.js"></script>
 
     <script src="assets/js/app.js"></script>
 </body>

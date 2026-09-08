@@ -19,35 +19,46 @@ function scrollConversationToBottom() {
  * Agrega un mensaje a la conversación.
  */
 function addMessage(text, type) {
-  const container = document.createElement("div");
-  container.classList.add("message", type);
 
-  const avatar = document.createElement("div");
-  avatar.classList.add("message-avatar");
-  avatar.setAttribute("aria-hidden", "true");
-  avatar.textContent = type === "user" ? "Tú" : "IA";
+    const container = document.createElement("div");
+    container.classList.add("message", type);
 
-  const body = document.createElement("div");
-  body.classList.add("message-body");
+    const label = document.createElement("div");
+    label.classList.add("message-label");
 
-  const label = document.createElement("div");
-  label.classList.add("message-label");
-  label.textContent = type === "user" ? "Tú" : "Asistente IA";
+    label.textContent =
+        type === "user"
+            ? "Tú"
+            : type === "loading"
+            ? "IA"
+            : "IA";
 
-  const content = document.createElement("div");
-  content.classList.add("message-content");
-  content.textContent = text;
+    const content = document.createElement("div");
+    content.classList.add("message-content");
 
-  body.appendChild(label);
-  body.appendChild(content);
+    // Las respuestas de la IA pueden contener Markdown
+    if (type === "assistant") {
 
-  container.appendChild(avatar);
-  container.appendChild(body);
-  messages.appendChild(container);
+        const html = marked.parse(text);
 
-  requestAnimationFrame(scrollConversationToBottom);
+        content.innerHTML =
+            DOMPurify.sanitize(html);
 
-  return container;
+    } else {
+
+        // Los mensajes del usuario se muestran como texto
+        content.textContent = text;
+    }
+
+    container.appendChild(label);
+    container.appendChild(content);
+
+    messages.appendChild(container);
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+    return container;
 }
 
 /**
